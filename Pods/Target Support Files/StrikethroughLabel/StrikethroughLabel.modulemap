@@ -1,0 +1,6 @@
+framework module StrikethroughLabel {
+  umbrella header "StrikethroughLabel-umbrella.h"
+
+  export *
+  module * { export * }
+}
