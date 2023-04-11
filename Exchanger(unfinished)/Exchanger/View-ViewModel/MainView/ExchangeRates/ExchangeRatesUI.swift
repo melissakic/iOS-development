@@ -9,7 +9,8 @@ import SwiftUI
 
 struct ExchangeRatesUI: View {
     @ObservedObject var ExchangeRatesVM=ExcangeRatesViewModel()
-    @State var loading=1.0
+    @State var loading=0.0
+    @State var arr:[String:Double]=[:]
         var body: some View {
         ZStack{
             Background(color: "Caramel")
@@ -22,9 +23,9 @@ struct ExchangeRatesUI: View {
                     CustomRectangle(height: 10, color: "Black")
                     ZStack {
                         CustomText(content: "Choose currency and hit the button(default is EUR).\nFetching may take a while", color: "Black", size: 23)
-                            .opacity(ExchangeRatesVM.loading)
+                            .opacity(loading)
                         ScrollView{
-                            ForEach(ExchangeRatesVM.rates.sorted(by: <),id: \.key){a,b in
+                            ForEach(arr.sorted(by: <),id: \.key){a,b in
                                 ZStack{
                                     RoundedRectangle(cornerRadius: 20)
                                         .stroke(.black,lineWidth: 3)
@@ -43,8 +44,13 @@ struct ExchangeRatesUI: View {
                     }
                     CustomRectangle(height: 10, color: "Black")
                     CustomButtonLarge(content: "Get rates!", background: "Black", foreground: "Caramel", action: {
-                        loading=0
-                        ExchangeRatesVM.conversion()
+                        loading=1.0
+                        arr=[:]
+                        ExchangeRatesVM.conversion(){data in
+                            loading=0.0
+                            arr=data
+                            
+                        }
                     })
                     Spacer()
                     CustomRectangle(height: 110, color: "Black")
